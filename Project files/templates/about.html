@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Medical Reference & AI Architecture - HematoVision{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="fw-bold mb-1"><i class="fa-solid fa-book-medical text-primary me-2"></i>Hematology Reference & AI Architecture</h2>
+        <p class="text-muted">Educational background on blood cell morphology, MobileNetV2 transfer learning, and Grad-CAM salience visualization.</p>
+    </div>
+</div>
+
+<!-- WBC Types Grid -->
+<h4 class="fw-bold mb-3"><i class="fa-solid fa-vials text-primary me-2"></i>White Blood Cell (Leukocyte) Types</h4>
+<div class="row g-4 mb-5">
+    {% for cell_name, info in cell_info.items() %}
+    <div class="col-md-6 col-lg-3">
+        <div class="card med-card p-3 h-100 border-top border-primary border-3">
+            <h5 class="fw-bold text-primary mb-2">{{ cell_name }}</h5>
+            <p class="small text-muted mb-2"><strong>Normal Range:</strong> {{ info.normal_range }}</p>
+            <p class="small text-secondary mb-3">{{ info.description }}</p>
+            <div class="p-2 bg-light rounded mt-auto">
+                <p class="extra-small text-muted mb-0" style="font-size: 0.75rem;"><strong>Clinical Context:</strong> {{ info.associated_conditions }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Deep Learning Architecture Section -->
+<div class="row g-4 mb-5">
+    <div class="col-lg-6">
+        <div class="card med-card p-4 h-100">
+            <h4 class="fw-bold mb-3 text-dark"><i class="fa-solid fa-network-wired text-primary me-2"></i>MobileNetV2 Transfer Learning</h4>
+            <p class="text-secondary small">
+                HematoVision leverages <strong>MobileNetV2</strong> pre-trained on the ImageNet visual database. MobileNetV2 uses depthwise separable convolutions and inverted residual blocks with linear bottlenecks, rendering it computationally efficient and ideal for biomedical image classification.
+            </p>
+            <ul class="small text-muted ps-3 mb-0">
+                <li class="mb-2"><strong>Feature Extractor:</strong> Frozen convolutional base preserving low-level edge, texture, and cellular membrane patterns.</li>
+                <li class="mb-2"><strong>Custom Classification Head:</strong> Global Average Pooling 2D layer coupled with dense ReLU and Dropout (0.3) regularization.</li>
+                <li class="mb-0"><strong>Output Layer:</strong> Softmax activation mapping 4 distinct leukocyte probabilities.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card med-card p-4 h-100">
+            <h4 class="fw-bold mb-3 text-dark"><i class="fa-solid fa-brain text-primary me-2"></i>Explainable AI (Grad-CAM)</h4>
+            <p class="text-secondary small">
+                To eliminate black-box opacity in medical decision making, HematoVision integrates <strong>Gradient-weighted Class Activation Mapping (Grad-CAM)</strong>.
+            </p>
+            <p class="text-secondary small mb-2">
+                Grad-CAM uses the gradients of any target concept flowing into the final convolutional layer to produce a coarse localization map highlighting the important regions in the image for predicting the concept.
+            </p>
+            <div class="p-3 bg-light rounded border">
+                <p class="small fw-semibold mb-0 text-dark">
+                    <i class="fa-solid fa-lightbulb text-warning me-1"></i>
+                    Enables hematologists to verify whether the AI focused on nuclear lobulation, cytoplasmic granules, or background artifacts.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

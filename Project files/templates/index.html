@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Diagnostic Studio - HematoVision Blood Cell Classifier{% endblock %}
+
+{% block content %}
+<div class="hero-card mb-4 text-center text-md-start">
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <h1 class="fw-extrabold mb-2 display-6">Automated White Blood Cell Classification</h1>
+            <p class="lead opacity-90 mb-3">
+                Upload a microscopic blood smear image to instantly perform 4-part WBC differential analysis powered by MobileNetV2 Transfer Learning and Explainable AI.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge bg-light text-dark"><i class="fa-solid fa-vial text-primary me-1"></i> Neutrophil</span>
+                <span class="badge bg-light text-dark"><i class="fa-solid fa-vial text-danger me-1"></i> Eosinophil</span>
+                <span class="badge bg-light text-dark"><i class="fa-solid fa-vial text-warning me-1"></i> Monocyte</span>
+                <span class="badge bg-light text-dark"><i class="fa-solid fa-vial text-success me-1"></i> Lymphocyte</span>
+            </div>
+        </div>
+        <div class="col-md-4 text-center mt-3 mt-md-0">
+            <i class="fa-solid fa-microscope text-light opacity-50" style="font-size: 6rem;"></i>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Upload Section -->
+    <div class="col-lg-7">
+        <div class="card med-card p-4 h-100">
+            <h4 class="fw-bold mb-3"><i class="fa-solid fa-cloud-arrow-up text-primary me-2"></i>Upload Blood Cell Specimen</h4>
+            
+            <form id="upload-form" action="{{ url_for('prediction.upload_predict') }}" method="POST" enctype="multipart/form-data">
+                <input type="file" id="file-input" name="file" accept="image/*" class="d-none" required>
+                
+                <div id="drop-zone" class="upload-zone mb-3">
+                    <i class="fa-solid fa-file-medical upload-icon"></i>
+                    <h5 class="fw-bold text-dark mb-1">Drag & Drop Microscopic Image Here</h5>
+                    <p class="text-muted small mb-0">or click to browse your file system (PNG, JPG, BMP up to 16MB)</p>
+                </div>
+                
+                <!-- Live Preview -->
+                <div id="preview-container" class="preview-container mb-3 d-none text-center p-2 bg-light">
+                    <p class="small fw-semibold text-muted mb-2">Selected File: <span id="file-name" class="text-primary"></span></p>
+                    <img id="image-preview" src="" alt="Specimen Preview" class="img-fluid rounded" style="max-height: 220px;">
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm" style="background-color: var(--primary-blue); border: none;">
+                    <i class="fa-solid fa-bolt me-2"></i>Run Automated Differential Analysis
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Feature Highlights -->
+    <div class="col-lg-5">
+        <div class="card med-card p-4 h-100">
+            <h4 class="fw-bold mb-3"><i class="fa-solid fa-circle-nodes text-primary me-2"></i>Clinical AI Capabilities</h4>
+            
+            <div class="d-flex align-items-start mb-3">
+                <div class="bg-primary text-white rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <div>
+                    <h6 class="fw-bold mb-1">MobileNetV2 Deep Learning</h6>
+                    <p class="text-muted small mb-0">Optimized transfer learning model pre-trained on ImageNet for rapid feature extraction and precision classification.</p>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-start mb-3">
+                <div class="bg-info text-white rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                    <i class="fa-solid fa-eye"></i>
+                </div>
+                <div>
+                    <h6 class="fw-bold mb-1">Explainable AI (Grad-CAM)</h6>
+                    <p class="text-muted small mb-0">Visualizes class activation heatmaps so pathologists can inspect exact cellular morphology regions driving predictions.</p>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-start mb-3">
+                <div class="bg-success text-white rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                    <i class="fa-solid fa-file-pdf"></i>
+                </div>
+                <div>
+                    <h6 class="fw-bold mb-1">Hospital Diagnostic PDF Reports</h6>
+                    <p class="text-muted small mb-0">Instantly exports complete hospital-style clinical summary sheets formatted with images, charts, and metadata.</p>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-start">
+                <div class="bg-secondary text-white rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                    <i class="fa-solid fa-database"></i>
+                </div>
+                <div>
+                    <h6 class="fw-bold mb-1">SQLite Audit History</h6>
+                    <p class="text-muted small mb-0">Every diagnosis is timestamped, indexed, searchable, and stored in a local thread-safe database.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

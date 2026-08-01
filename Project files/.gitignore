@@ -1,0 +1,24 @@
+# Python & Virtual environment
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+
+# Uploads, logs & dynamic database files
+uploads/*
+!uploads/.gitkeep
+reports/*
+!reports/.gitkeep
+logs/*
+!logs/.gitkeep
+database/sqlite.db
+models/saved_model/*.h5
+models/saved_model/*.keras
+
+# IDE & System
+.vscode/
+.idea/
+.DS_Store
+*.log

@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction History - HematoVision AI{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4">
+    <div>
+        <h2 class="fw-bold mb-1"><i class="fa-solid fa-folder-open text-primary me-2"></i>Prediction Audit History</h2>
+        <p class="text-muted mb-0">Search, filter, inspect, and manage saved diagnostic records in SQLite.</p>
+    </div>
+</div>
+
+<!-- Search & Filter Form -->
+<div class="card med-card p-3 mb-4">
+    <form method="GET" action="{{ url_for('main.history') }}" class="row g-2 align-items-center">
+        <div class="col-md-6">
+            <div class="input-group">
+                <span class="input-group-text bg-light"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                <input type="text" name="search" class="form-control" placeholder="Search by file name or cell type..." value="{{ search }}">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <select name="class" class="form-select">
+                <option value="">-- All Cell Types --</option>
+                {% for c in classes %}
+                <option value="{{ c }}" {% if filter_class == c %}selected{% endif %}>{{ c }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2 d-grid">
+            <button type="submit" class="btn btn-primary fw-bold" style="background-color: var(--primary-blue); border: none;">Filter</button>
+        </div>
+    </form>
+</div>
+
+<!-- History Table -->
+<div class="card med-card p-4">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Specimen File</th>
+                    <th>Predicted Class</th>
+                    <th>Confidence</th>
+                    <th>Latency</th>
+                    <th>Timestamp</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in records %}
+                <tr id="row-{{ row.id }}">
+                    <td class="font-monospace fw-bold text-muted">#{{ row.id }}</td>
+                    <td class="fw-semibold text-dark">{{ row.original_filename }}</td>
+                    <td>
+                        <span class="badge bg-light text-primary border border-primary font-monospace">
+                            {{ row.predicted_class }}
+                        </span>
+                    </td>
+                    <td class="fw-bold">{{ row.confidence }}%</td>
+                    <td class="small text-muted">{{ row.inference_time }} ms</td>
+                    <td class="small text-muted">{{ row.created_at[:16] }}</td>
+                    <td class="text-center">
+                        <a href="{{ url_for('prediction.download_report', pred_id=row.id) }}" class="btn btn-sm btn-outline-danger me-1" title="Download PDF Report">
+                            <i class="fa-solid fa-file-pdf"></i>
+                        </a>
+                        <button onclick="deleteRecord({{ row.id }})" class="btn btn-sm btn-outline-secondary" title="Delete Record">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">No prediction records matched your query.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function deleteRecord(id) {
+        if (confirm("Are you sure you want to delete prediction record #" + id + "?")) {
+            fetch("/api/v1/history/" + id, { method: "DELETE" })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === "success") {
+                    const row = document.getElementById("row-" + id);
+                    if (row) row.remove();
+                } else {
+                    alert("Error deleting record: " + data.message);
+                }
+            })
+            .catch(err => alert("Server error: " + err));
+        }
+    }
+</script>
+{% endblock %}
