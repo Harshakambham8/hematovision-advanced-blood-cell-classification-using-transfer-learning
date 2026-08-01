@@ -80,25 +80,52 @@ HematoVision/
 
 ## Quickstart & Setup
 
-### 1. Environment Requirements
-- Python 3.10+
-- `pip` package manager
+Follow these step-by-step instructions to set up and run the HematoVision web application on your local machine:
 
-### 2. Installation
+### 1. Prerequisites
+- **Python 3.10+** installed on your system.
+- `pip` package manager.
+
+### 2. Installation & Environment Setup
+
 ```bash
-# Clone the repository
+# 1. Clone the repository (if not already local)
 git clone https://github.com/your-org/hematovision.git
 cd hematovision
 
-# Install required dependencies
+# 2. Create a virtual environment (Recommended)
+# Windows (PowerShell / CMD):
+python -m venv venv
+.\venv\Scripts\activate
+
+# macOS / Linux:
+python3 -m venv venv
+source venv/bin/activate
+
+# 3. Install required dependencies
 pip install -r requirements.txt
 ```
 
-### 3. Launching the Web Server
+### 3. Running the Web Application
+
+Launch the Flask development server by running:
+
 ```bash
 python app.py
 ```
-The server will start at `http://127.0.0.1:5000/`.
+
+Upon starting, you will see output confirming that the database schema is initialized and the server is running:
+
+```text
+Starting HematoVision Web Application on http://127.0.0.1:5000
+ * Running on http://127.0.0.1:5000
+```
+
+### 4. Accessing the Application
+
+Open your browser and navigate to:
+- **Local Application URL**: [http://127.0.0.1:5000](http://127.0.0.1:5000) or [http://localhost:5000](http://localhost:5000)
+- **API Health Check**: [http://127.0.0.1:5000/api/v1/health](http://127.0.0.1:5000/api/v1/health)
 
 ---
 
